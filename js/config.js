@@ -1,0 +1,15 @@
+export const CONFIG = {
+    BLOCK_SIZE: 2,
+    INITIAL_SPEED: 0.15,
+    ACCELERATION: 0.0008,
+    BALL_RADIUS: 0.5,
+    CAMERA_DISTANCE: 10,
+    CAMERA_LERP: 0.08,
+    PATH_BUFFER_LENGTH: 25,
+    CLEANUP_DISTANCE: 15,
+    COLORS: {
+        BACKGROUND: 0xb2ebf2,
+        BALL: 0x212121,
+        BLOCK: 0x00bcd4
+    }
+};
