@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { CONFIG } from './config.js';
 
 export class CameraManager {

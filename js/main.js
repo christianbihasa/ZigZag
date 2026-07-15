@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { CONFIG } from './config.js';
 import { CameraManager } from './camera.js';
 import { InputManager } from './input.js';
