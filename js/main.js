@@ -8,6 +8,7 @@ import { Ball } from './ball.js';
 class Game {
     constructor() {
         this.score = 0;
+        this.isGameStarted = false;
         this.isGameOver = false;
 
         this.initDOM();
@@ -62,6 +63,13 @@ class Game {
     handleAction() {
         if (this.isGameOver) return;
 
+        // If the game hasn't started, the first input kicks off the movement
+        if (!this.isGameStarted) {
+            this.isGameStarted = true;
+            return;
+        }
+
+        // Subsequent inputs handle turning mechanics
         this.ball.toggleDirection();
         this.score++;
         this.scoreElement.innerText = this.score;
@@ -75,6 +83,7 @@ class Game {
 
     restart() {
         this.score = 0;
+        this.isGameStarted = false;
         this.isGameOver = false;
         this.scoreElement.innerText = '0';
         this.gameOverBox.style.display = 'none';
@@ -92,7 +101,7 @@ class Game {
     animate() {
         requestAnimationFrame(this.animate);
 
-        if (!this.isGameOver) {
+        if (this.isGameStarted && !this.isGameOver) {
             this.ball.updatePosition();
             const ballPos = this.ball.getPosition();
 
@@ -102,8 +111,13 @@ class Game {
                 this.pathManager.update(ballPos);
                 this.cameraManager.updatePosition(ballPos);
             }
-        } else {
+        } else if (this.isGameOver) {
             this.ball.animateFall();
+        }
+
+        // Keeps camera tracking smooth and centered on the ball while waiting for the start input
+        if (!this.isGameStarted) {
+            this.cameraManager.updatePosition(this.ball.getPosition());
         }
 
         this.renderer.render(this.scene, this.cameraManager.camera);
