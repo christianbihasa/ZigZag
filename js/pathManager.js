@@ -7,15 +7,14 @@ export class PathManager {
         this.activeBlocks = [];
         this.lastPosition = { x: 0, y: 0, z: 0 };
         
-        // standard track tile blueprint
+        // Standard narrow track tile blueprint
         this.blockGeometry = new THREE.BoxGeometry(
             CONFIG.BLOCK_SIZE, 
             3, 
             CONFIG.BLOCK_SIZE
         );
         
-        // 3x wider footprint platform specifically for the game launch safety zone
-        this.startPlatformGeometry = new THREE.BoxGeometry(6, 3, 6);
+        this.startPlatformGeometry = new THREE.BoxGeometry(12, 3, 12);
         
         this.blockMaterial = new THREE.MeshPhongMaterial({ 
             color: CONFIG.COLORS.BLOCK 
@@ -42,7 +41,7 @@ export class PathManager {
     }
 
     generateInitialPath() {
-        // Instantiate secure wide platform mesh at system origin
+        // Instantiate the oversized safe-zone launch platform at system origin
         const startPlatform = new THREE.Mesh(this.startPlatformGeometry, this.blockMaterial);
         startPlatform.position.set(0, -1.5, 0);
         startPlatform.receiveShadow = true;
@@ -51,10 +50,9 @@ export class PathManager {
         this.scene.add(startPlatform);
         this.activeBlocks.push(startPlatform);
 
-        // Align generation coordinate boundaries flush with the outer edge of the 6x6 pad
-        this.lastPosition = { x: 2, y: 0, z: 2 };
+        this.lastPosition = { x: 5, y: 0, z: 5 };
 
-        // Buffer downstream path steps
+        // Pre-build initial downstream track segments
         for (let i = 0; i < CONFIG.PATH_BUFFER_LENGTH; i++) {
             this.extendPath();
         }
@@ -70,8 +68,7 @@ export class PathManager {
 
         const firstBlock = this.activeBlocks[0];
         
-        // Adjust bounds logic dynamically to prevent wiping the large platform while ball crosses it
-        const cleanupThreshold = firstBlock.isStartingPlatform ? 18 : CONFIG.CLEANUP_DISTANCE;
+        const cleanupThreshold = firstBlock.isStartingPlatform ? 24 : CONFIG.CLEANUP_DISTANCE;
         
         if (
             firstBlock.position.x < ballPosition.x - cleanupThreshold &&
@@ -79,20 +76,20 @@ export class PathManager {
         ) {
             const removedBlock = this.activeBlocks.shift();
             this.scene.remove(removedBlock);
+            removedBlock.geometry.dispose();
         }
     }
 
     isBallOnPlatform(ballPosition) {
         for (let block of this.activeBlocks) {
-            // Evaluates mathematical bounding boxes using unique mesh properties
-            const currentBlockWidth = block.isStartingPlatform ? 6 : CONFIG.BLOCK_SIZE;
-            const halfSize = currentBlockWidth / 2;
+            const currentBlockWidth = block.isStartingPlatform ? 12 : CONFIG.BLOCK_SIZE;
+            const outerBoundTolerance = (currentBlockWidth / 2) + CONFIG.BALL_RADIUS;
             
             if (
-                ballPosition.x >= block.position.x - halfSize &&
-                ballPosition.x <= block.position.x + halfSize &&
-                ballPosition.z >= block.position.z - halfSize &&
-                ballPosition.z <= block.position.z + halfSize
+                ballPosition.x >= block.position.x - outerBoundTolerance &&
+                ballPosition.x <= block.position.x + outerBoundTolerance &&
+                ballPosition.z >= block.position.z - outerBoundTolerance &&
+                ballPosition.z <= block.position.z + outerBoundTolerance
             ) {
                 return true;
             }
