@@ -4,10 +4,12 @@ import { CameraManager } from './camera.js';
 import { InputManager } from './input.js';
 import { PathManager } from './pathManager.js';
 import { Ball } from './ball.js';
+import { IntroModal } from './introModal.js'; 
 
 class Game {
     constructor() {
         this.score = 0;
+        this.isModalActive = true; 
         this.isGameStarted = false;
         this.isGameOver = false;
 
@@ -53,6 +55,11 @@ class Game {
         this.ball = new Ball(this.scene);
         this.pathManager = new PathManager(this.scene);
         this.pathManager.generateInitialPath();
+        
+        // Initialize the modal with a callback that lifts the input lock
+        this.introModal = new IntroModal(() => {
+            this.isModalActive = false;
+        });
     }
 
     initEvents() {
@@ -61,15 +68,14 @@ class Game {
     }
 
     handleAction() {
-        if (this.isGameOver) return;
+        // Disallow turning inputs if the modal onboarding card is currently visible
+        if (this.isModalActive || this.isGameOver) return;
 
-        // If the game hasn't started, the first input kicks off the movement
         if (!this.isGameStarted) {
             this.isGameStarted = true;
             return;
         }
 
-        // Subsequent inputs handle turning mechanics
         this.ball.toggleDirection();
         this.score++;
         this.scoreElement.innerText = this.score;
@@ -115,7 +121,6 @@ class Game {
             this.ball.animateFall();
         }
 
-        // Keeps camera tracking smooth and centered on the ball while waiting for the start input
         if (!this.isGameStarted) {
             this.cameraManager.updatePosition(this.ball.getPosition());
         }
@@ -124,5 +129,4 @@ class Game {
     }
 }
 
-// Instantiate and launch game
 new Game();
