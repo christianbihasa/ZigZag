@@ -1,24 +1,74 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>ZigZag</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <title>ZigZag Arcade</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- Onboarding / Credits Modal -->
+    <div id="intro-modal">
+      <div class="modal-content">
+        <h2>ZigZag Arcade</h2>
+        <p class="credits">
+          This project is built as a respectful recreation and arcade tribute to
+          the iconic mobile game <strong>ZigZag</strong> originally developed by
+          <strong>Ketchapp</strong>. All conceptual gameplay rights belong to
+          their original creators.
+        </p>
 
-    <div id="ui">
-        <div id="score">0</div>
-        <div id="instructions">Tap or Press Space to Turn</div>
+        <div class="info-card">
+          <h3>🎮 Controls</h3>
+          <ul>
+            <li>
+              <strong>PC Desktop:</strong> Press <strong>Spacebar</strong> or
+              click the mouse to turn.
+            </li>
+            <li>
+              <strong>Mobile Device:</strong> Tap anywhere on the screen to
+              turn.
+            </li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3>💡 Things to Know</h3>
+          <ul>
+            <li>
+              The ball moves progressively faster the higher your score climbs.
+            </li>
+            <li>
+              We've engineered an expanded starting platform to give you a
+              moment to focus before the path narrows.
+            </li>
+            <li>
+              The collision engine is forgiving: the ball won't trigger a Game
+              Over until it completely clears the platform edge.
+            </li>
+          </ul>
+        </div>
+
+        <button id="start-game-btn">Enter Arcade</button>
+      </div>
     </div>
 
+    <!-- User Interface Overlay -->
+    <div id="ui">
+      <div id="score">0</div>
+      <div id="instructions">Tap or Press Space to Turn</div>
+    </div>
+
+    <!-- Game Over Screen -->
     <div id="gameover">
-        <h1>Game Over</h1>
-        <div id="final-score">Score: 0</div>
-        <button id="restart-btn">Play Again</button>
+      <h1>Game Over</h1>
+      <div id="final-score">Score: 0</div>
+      <button id="restart-btn">Play Again</button>
     </div>
 
     <script type="module" src="js/main.js"></script>
-</body>
+  </body>
 </html>
