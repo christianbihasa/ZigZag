@@ -10,14 +10,24 @@ export class Ball {
         this.mesh.castShadow = true;
         this.scene.add(this.mesh);
 
+        const defaultPreset = CONFIG.SPEED_PRESETS[CONFIG.DEFAULT_SPEED_PRESET];
+        this.baseSpeed = defaultPreset.initial;
+        this.acceleration = defaultPreset.accel;
         this.direction = 'z';
-        this.speed = CONFIG.INITIAL_SPEED;
+        this.speed = this.baseSpeed;
+
         this.reset();
+    }
+
+    setSpeedConfig(initialSpeed, accel) {
+        this.baseSpeed = initialSpeed;
+        this.acceleration = accel;
+        this.speed = this.baseSpeed;
     }
 
     toggleDirection() {
         this.direction = (this.direction === 'x') ? 'z' : 'x';
-        this.speed += CONFIG.ACCELERATION;
+        this.speed += this.acceleration;
     }
 
     updatePosition() {
@@ -41,6 +51,6 @@ export class Ball {
     reset() {
         this.mesh.position.set(0, CONFIG.BALL_RADIUS, 0);
         this.direction = 'z';
-        this.speed = CONFIG.INITIAL_SPEED;
+        this.speed = this.baseSpeed;
     }
 }
