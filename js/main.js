@@ -4,12 +4,13 @@ import { CameraManager } from './camera.js';
 import { InputManager } from './input.js';
 import { PathManager } from './pathManager.js';
 import { Ball } from './ball.js';
-import { IntroModal } from './introModal.js'; 
+import { IntroModal } from './introModal.js';
+import { SettingsModal } from './settingsModal.js';
 
 class Game {
     constructor() {
         this.score = 0;
-        this.isModalActive = true; 
+        this.isModalActive = true;
         this.isGameStarted = false;
         this.isGameOver = false;
 
@@ -56,9 +57,13 @@ class Game {
         this.pathManager = new PathManager(this.scene);
         this.pathManager.generateInitialPath();
         
-        // Initialize the modal with a callback that lifts the input lock
         this.introModal = new IntroModal(() => {
             this.isModalActive = false;
+        });
+
+        // Initialize Settings Modal and wire up live speed changes
+        this.settingsModal = new SettingsModal((preset) => {
+            this.ball.setSpeedConfig(preset.initial, preset.accel);
         });
     }
 
@@ -68,8 +73,8 @@ class Game {
     }
 
     handleAction() {
-        // Disallow turning inputs if the modal onboarding card is currently visible
-        if (this.isModalActive || this.isGameOver) return;
+        // Ignore turn inputs if onboarding or settings modal is currently active
+        if (this.isModalActive || this.settingsModal.isOpen() || this.isGameOver) return;
 
         if (!this.isGameStarted) {
             this.isGameStarted = true;
