@@ -202,3 +202,102 @@ canvas {
 #start-game-btn:active {
     transform: scale(0.98);
 }
+
+/* --- Settings Button --- */
+#settings-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    font-size: 1.5rem;
+    padding: 10px 14px;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+#settings-btn:hover {
+    background: #ffffff;
+    transform: rotate(30deg) scale(1.08);
+}
+
+#settings-btn:active {
+    transform: scale(0.95);
+}
+
+/* --- Settings Modal Styling --- */
+#settings-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(38, 50, 56, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 110;
+    padding: 20px;
+}
+
+.setting-group {
+    margin: 25px 0;
+    text-align: left;
+}
+
+.setting-group h3 {
+    font-size: 1rem;
+    color: #37474f;
+    margin-bottom: 12px;
+}
+
+.speed-selector {
+    display: flex;
+    gap: 10px;
+}
+
+.speed-option {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #cfd8dc;
+    background: #ffffff;
+    color: #455a64;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.speed-option:hover {
+    border-color: #00bcd4;
+}
+
+.speed-option.active {
+    border-color: #00bcd4;
+    background-color: #e0f7fa;
+    color: #00838f;
+}
+
+#close-settings-btn {
+    background-color: #00bcd4;
+    color: #ffffff;
+    border: none;
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s ease;
+}
+
+#close-settings-btn:hover {
+    background-color: #0097a7;
+}
