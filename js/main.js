@@ -6,6 +6,7 @@ import { PathManager } from './pathManager.js';
 import { Ball } from './ball.js';
 import { IntroModal } from './introModal.js';
 import { SettingsModal } from './settingsModal.js';
+import { ThemeManager } from './themeManager.js'; // Import ThemeManager
 
 class Game {
     constructor() {
@@ -56,12 +57,14 @@ class Game {
         this.ball = new Ball(this.scene);
         this.pathManager = new PathManager(this.scene);
         this.pathManager.generateInitialPath();
+
+        // Instantiate ThemeManager
+        this.themeManager = new ThemeManager(this.scene, this.pathManager);
         
         this.introModal = new IntroModal(() => {
             this.isModalActive = false;
         });
 
-        // Initialize Settings Modal and wire up live speed changes
         this.settingsModal = new SettingsModal((preset) => {
             this.ball.setSpeedConfig(preset.initial, preset.accel);
         });
@@ -73,7 +76,6 @@ class Game {
     }
 
     handleAction() {
-        // Ignore turn inputs if onboarding or settings modal is currently active
         if (this.isModalActive || this.settingsModal.isOpen() || this.isGameOver) return;
 
         if (!this.isGameStarted) {
@@ -84,6 +86,9 @@ class Game {
         this.ball.toggleDirection();
         this.score++;
         this.scoreElement.innerText = this.score;
+
+        // Check and trigger palette transitions on score threshold changes
+        this.themeManager.updateScore(this.score);
     }
 
     triggerGameOver() {
@@ -102,6 +107,7 @@ class Game {
         this.ball.reset();
         this.cameraManager.reset();
         this.pathManager.reset();
+        this.themeManager.reset(); // Reset colors to baseline palette
     }
 
     onWindowResize() {
@@ -111,6 +117,9 @@ class Game {
 
     animate() {
         requestAnimationFrame(this.animate);
+
+        // Keep palette color lerping active every frame
+        this.themeManager.update();
 
         if (this.isGameStarted && !this.isGameOver) {
             this.ball.updatePosition();
