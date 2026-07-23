@@ -301,3 +301,31 @@ canvas {
 #close-settings-btn:hover {
     background-color: #0097a7;
 }
+
+.direction-selector {
+    display: flex;
+    gap: 10px;
+}
+
+.direction-option {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #cfd8dc;
+    background: #ffffff;
+    color: #455a64;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.direction-option:hover {
+    border-color: #00bcd4;
+}
+
+.direction-option.active {
+    border-color: #00bcd4;
+    background-color: #e0f7fa;
+    color: #00838f;
+}

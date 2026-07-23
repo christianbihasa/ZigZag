@@ -57,21 +57,29 @@
     </div>
 
     <!-- Settings Modal -->
-    <div id="settings-modal" style="display: none">
-      <div class="modal-content">
-        <h2>Game Settings</h2>
+    <div id="settings-modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Game Settings</h2>
+            
+            <div class="setting-group">
+                <h3>Ball Speed Mode</h3>
+                <div class="speed-selector">
+                    <button class="speed-option" data-speed="slow">Slow</button>
+                    <button class="speed-option" data-speed="normal">Normal</button>
+                    <button class="speed-option" data-speed="fast">Fast</button>
+                </div>
+            </div>
 
-        <div class="setting-group">
-          <h3>Ball Speed Mode</h3>
-          <div class="speed-selector">
-            <button class="speed-option" data-speed="slow">Slow</button>
-            <button class="speed-option" data-speed="normal">Normal</button>
-            <button class="speed-option" data-speed="fast">Fast</button>
-          </div>
+            <div class="setting-group">
+                <h3>Direction Mode</h3>
+                <div class="direction-selector">
+                    <button class="direction-option" data-direction="down">Down (Classic)</button>
+                    <button class="direction-option" data-direction="up">Up</button>
+                </div>
+            </div>
+
+            <button id="close-settings-btn">Save & Close</button>
         </div>
-
-        <button id="close-settings-btn">Save & Close</button>
-      </div>
     </div>
 
     <!-- User Interface Overlay -->
