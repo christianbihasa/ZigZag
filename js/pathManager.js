@@ -6,8 +6,8 @@ export class PathManager {
         this.scene = scene;
         this.activeBlocks = [];
         this.lastPosition = { x: 0, y: 0, z: 0 };
+        this.dirSign = CONFIG.DIRECTION_MODES[CONFIG.DEFAULT_DIRECTION_MODE].sign;
         
-        // Standard narrow track tile blueprint
         this.blockGeometry = new THREE.BoxGeometry(
             CONFIG.BLOCK_SIZE, 
             3, 
@@ -19,6 +19,10 @@ export class PathManager {
         this.blockMaterial = new THREE.MeshPhongMaterial({ 
             color: CONFIG.COLORS.BLOCK 
         });
+    }
+
+    setDirectionSign(sign) {
+        this.dirSign = sign;
     }
 
     createBlock(x, z) {
@@ -33,15 +37,14 @@ export class PathManager {
     extendPath() {
         const choice = Math.random() > 0.5 ? 'x' : 'z';
         if (choice === 'x') {
-            this.lastPosition.x += CONFIG.BLOCK_SIZE;
+            this.lastPosition.x += CONFIG.BLOCK_SIZE * this.dirSign;
         } else {
-            this.lastPosition.z += CONFIG.BLOCK_SIZE;
+            this.lastPosition.z += CONFIG.BLOCK_SIZE * this.dirSign;
         }
         this.createBlock(this.lastPosition.x, this.lastPosition.z);
     }
 
     generateInitialPath() {
-        // Instantiate the oversized safe-zone launch platform at system origin
         const startPlatform = new THREE.Mesh(this.startPlatformGeometry, this.blockMaterial);
         startPlatform.position.set(0, -1.5, 0);
         startPlatform.receiveShadow = true;
@@ -50,9 +53,13 @@ export class PathManager {
         this.scene.add(startPlatform);
         this.activeBlocks.push(startPlatform);
 
-        this.lastPosition = { x: 5, y: 0, z: 5 };
+        // Align path start offset based on active direction vector
+        this.lastPosition = { 
+            x: 5 * this.dirSign, 
+            y: 0, 
+            z: 5 * this.dirSign 
+        };
 
-        // Pre-build initial downstream track segments
         for (let i = 0; i < CONFIG.PATH_BUFFER_LENGTH; i++) {
             this.extendPath();
         }
@@ -67,13 +74,13 @@ export class PathManager {
         }
 
         const firstBlock = this.activeBlocks[0];
-        
         const cleanupThreshold = firstBlock.isStartingPlatform ? 24 : CONFIG.CLEANUP_DISTANCE;
         
-        if (
-            firstBlock.position.x < ballPosition.x - cleanupThreshold &&
-            firstBlock.position.z < ballPosition.z - cleanupThreshold
-        ) {
+        // Check if block has fallen behind ball relative to current movement direction
+        const pastX = (firstBlock.position.x - ballPosition.x) * this.dirSign < -cleanupThreshold;
+        const pastZ = (firstBlock.position.z - ballPosition.z) * this.dirSign < -cleanupThreshold;
+
+        if (pastX && pastZ) {
             const removedBlock = this.activeBlocks.shift();
             this.scene.remove(removedBlock);
             removedBlock.geometry.dispose();
