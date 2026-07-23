@@ -20,16 +20,27 @@ export const CONFIG = {
     },
     DEFAULT_SPEED_PRESET: 'normal',
 
-    // --- Dynamic Palette Shifts Settings ---
+    DIRECTION_MODES: {
+        down: {
+            label: 'Down (Classic)',
+            sign: 1
+        },
+        up: {
+            label: 'Up',
+            sign: -1
+        }
+    },
+    DEFAULT_DIRECTION_MODE: 'down',
+
     PALETTE_SHIFT_INTERVAL: 15,
     COLOR_TRANSITION_SPEED: 0.035,
     PALETTES: [
-        { BACKGROUND: 0xb2ebf2, BLOCK: 0x00bcd4 }, // Default Soft Cyan
-        { BACKGROUND: 0xf8bbd0, BLOCK: 0xe91e63 }, // Vibrant Rose / Magenta
-        { BACKGROUND: 0xd1c4e9, BLOCK: 0x673ab7 }, // Deep Violet / Purple
-        { BACKGROUND: 0xc8e6c9, BLOCK: 0x4caf50 }, // Fresh Mint / Emerald
-        { BACKGROUND: 0xffecb3, BLOCK: 0xff9800 }, // Warm Sunset / Amber
-        { BACKGROUND: 0x263238, BLOCK: 0x00e676 }  // Midnight Dark / Neon Green
+        { BACKGROUND: 0xb2ebf2, BLOCK: 0x00bcd4 },
+        { BACKGROUND: 0xf8bbd0, BLOCK: 0xe91e63 },
+        { BACKGROUND: 0xd1c4e9, BLOCK: 0x673ab7 },
+        { BACKGROUND: 0xc8e6c9, BLOCK: 0x4caf50 },
+        { BACKGROUND: 0xffecb3, BLOCK: 0xff9800 },
+        { BACKGROUND: 0x263238, BLOCK: 0x00e676 }
     ],
 
     BALL_RADIUS: 0.5,
