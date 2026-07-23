@@ -6,7 +6,7 @@ import { PathManager } from './pathManager.js';
 import { Ball } from './ball.js';
 import { IntroModal } from './introModal.js';
 import { SettingsModal } from './settingsModal.js';
-import { ThemeManager } from './themeManager.js'; // Import ThemeManager
+import { ThemeManager } from './themeManager.js';
 
 class Game {
     constructor() {
@@ -56,18 +56,24 @@ class Game {
     initEntities() {
         this.ball = new Ball(this.scene);
         this.pathManager = new PathManager(this.scene);
-        this.pathManager.generateInitialPath();
-
-        // Instantiate ThemeManager
+        
         this.themeManager = new ThemeManager(this.scene, this.pathManager);
         
         this.introModal = new IntroModal(() => {
             this.isModalActive = false;
         });
 
-        this.settingsModal = new SettingsModal((preset) => {
-            this.ball.setSpeedConfig(preset.initial, preset.accel);
+        // Settings callback applies speed and direction mode updates
+        this.settingsModal = new SettingsModal((settings) => {
+            this.ball.setSpeedConfig(settings.speedPreset.initial, settings.speedPreset.accel);
+            
+            this.ball.setDirectionSign(settings.directionMode.sign);
+            this.pathManager.setDirectionSign(settings.directionMode.sign);
+            
+            this.restart();
         });
+
+        this.pathManager.generateInitialPath();
     }
 
     initEvents() {
@@ -87,7 +93,6 @@ class Game {
         this.score++;
         this.scoreElement.innerText = this.score;
 
-        // Check and trigger palette transitions on score threshold changes
         this.themeManager.updateScore(this.score);
     }
 
@@ -107,7 +112,7 @@ class Game {
         this.ball.reset();
         this.cameraManager.reset();
         this.pathManager.reset();
-        this.themeManager.reset(); // Reset colors to baseline palette
+        this.themeManager.reset();
     }
 
     onWindowResize() {
@@ -118,7 +123,6 @@ class Game {
     animate() {
         requestAnimationFrame(this.animate);
 
-        // Keep palette color lerping active every frame
         this.themeManager.update();
 
         if (this.isGameStarted && !this.isGameOver) {
