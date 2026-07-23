@@ -6,10 +6,12 @@ export class SettingsModal {
         this.modalElement = document.getElementById('settings-modal');
         this.openButton = document.getElementById('settings-btn');
         this.closeButton = document.getElementById('close-settings-btn');
+        
         this.speedButtons = document.querySelectorAll('.speed-option');
+        this.directionButtons = document.querySelectorAll('.direction-option');
 
-        // Retrieve persisted preference or fallback to default
         this.currentSpeedPreset = localStorage.getItem('zigzag_speed_preset') || CONFIG.DEFAULT_SPEED_PRESET;
+        this.currentDirectionMode = localStorage.getItem('zigzag_direction_mode') || CONFIG.DEFAULT_DIRECTION_MODE;
 
         this.initEvents();
         this.updateActiveUI();
@@ -30,36 +32,53 @@ export class SettingsModal {
         this.speedButtons.forEach((btn) => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                const presetKey = btn.dataset.speed;
-                this.setSpeedPreset(presetKey);
+                this.setSpeedPreset(btn.dataset.speed);
+            });
+        });
+
+        this.directionButtons.forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.setDirectionMode(btn.dataset.direction);
             });
         });
     }
 
     setSpeedPreset(presetKey) {
         if (!CONFIG.SPEED_PRESETS[presetKey]) return;
-
         this.currentSpeedPreset = presetKey;
         localStorage.setItem('zigzag_speed_preset', presetKey);
+        this.updateActiveUI();
+        this.applySettings();
+    }
 
+    setDirectionMode(dirKey) {
+        if (!CONFIG.DIRECTION_MODES[dirKey]) return;
+        this.currentDirectionMode = dirKey;
+        localStorage.setItem('zigzag_direction_mode', dirKey);
         this.updateActiveUI();
         this.applySettings();
     }
 
     updateActiveUI() {
         this.speedButtons.forEach((btn) => {
-            if (btn.dataset.speed === this.currentSpeedPreset) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
+            btn.classList.toggle('active', btn.dataset.speed === this.currentSpeedPreset);
+        });
+
+        this.directionButtons.forEach((btn) => {
+            btn.classList.toggle('active', btn.dataset.direction === this.currentDirectionMode);
         });
     }
 
     applySettings() {
-        const preset = CONFIG.SPEED_PRESETS[this.currentSpeedPreset];
-        if (this.onSettingsChange && preset) {
-            this.onSettingsChange(preset);
+        const speedPreset = CONFIG.SPEED_PRESETS[this.currentSpeedPreset];
+        const dirMode = CONFIG.DIRECTION_MODES[this.currentDirectionMode];
+
+        if (this.onSettingsChange && speedPreset && dirMode) {
+            this.onSettingsChange({
+                speedPreset,
+                directionMode: dirMode
+            });
         }
     }
 
