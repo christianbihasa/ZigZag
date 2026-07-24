@@ -67,8 +67,8 @@ class Game {
         this.settingsModal = new SettingsModal((settings) => {
             this.ball.setSpeedConfig(settings.speedPreset.initial, settings.speedPreset.accel);
             
-            this.ball.setDirectionSign(settings.directionMode.sign);
-            this.pathManager.setDirectionSign(settings.directionMode.sign);
+            this.ball.setDirectionVector(settings.directionMode.xSign, settings.directionMode.zSign);
+            this.pathManager.setDirectionVector(settings.directionMode.xSign, settings.directionMode.zSign);
             
             this.restart();
         });
