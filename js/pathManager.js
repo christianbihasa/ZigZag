@@ -48,7 +48,15 @@ export class PathManager {
         this.createBlock(this.lastPosition.x, this.lastPosition.z);
     }
 
+    clearBlocks() {
+        for (let block of this.activeBlocks) {
+            this.scene.remove(block);
+        }
+        this.activeBlocks = [];
+    }
+
     generateInitialPath() {
+        this.clearBlocks();
         const startPlatform = new THREE.Mesh(this.startPlatformGeometry, this.blockMaterial);
         startPlatform.position.set(0, -1.5, 0);
         startPlatform.receiveShadow = true;

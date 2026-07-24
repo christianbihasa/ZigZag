@@ -72,8 +72,6 @@ class Game {
             
             this.restart();
         });
-
-        this.pathManager.generateInitialPath();
     }
 
     initEvents() {
