@@ -6,7 +6,10 @@ export class PathManager {
         this.scene = scene;
         this.activeBlocks = [];
         this.lastPosition = { x: 0, y: 0, z: 0 };
-        this.dirSign = CONFIG.DIRECTION_MODES[CONFIG.DEFAULT_DIRECTION_MODE].sign;
+        
+        const defaultDir = CONFIG.DIRECTION_MODES[CONFIG.DEFAULT_DIRECTION_MODE];
+        this.xSign = defaultDir.xSign;
+        this.zSign = defaultDir.zSign;
         
         this.blockGeometry = new THREE.BoxGeometry(
             CONFIG.BLOCK_SIZE, 
@@ -21,8 +24,9 @@ export class PathManager {
         });
     }
 
-    setDirectionSign(sign) {
-        this.dirSign = sign;
+    setDirectionVector(xSign, zSign) {
+        this.xSign = xSign;
+        this.zSign = zSign;
     }
 
     createBlock(x, z) {
@@ -37,9 +41,9 @@ export class PathManager {
     extendPath() {
         const choice = Math.random() > 0.5 ? 'x' : 'z';
         if (choice === 'x') {
-            this.lastPosition.x += CONFIG.BLOCK_SIZE * this.dirSign;
+            this.lastPosition.x += CONFIG.BLOCK_SIZE * this.xSign;
         } else {
-            this.lastPosition.z += CONFIG.BLOCK_SIZE * this.dirSign;
+            this.lastPosition.z += CONFIG.BLOCK_SIZE * this.zSign;
         }
         this.createBlock(this.lastPosition.x, this.lastPosition.z);
     }
@@ -53,11 +57,10 @@ export class PathManager {
         this.scene.add(startPlatform);
         this.activeBlocks.push(startPlatform);
 
-        // Align path start offset based on active direction vector
         this.lastPosition = { 
-            x: 5 * this.dirSign, 
+            x: 5 * this.xSign, 
             y: 0, 
-            z: 5 * this.dirSign 
+            z: 5 * this.zSign 
         };
 
         for (let i = 0; i < CONFIG.PATH_BUFFER_LENGTH; i++) {
@@ -76,9 +79,8 @@ export class PathManager {
         const firstBlock = this.activeBlocks[0];
         const cleanupThreshold = firstBlock.isStartingPlatform ? 24 : CONFIG.CLEANUP_DISTANCE;
         
-        // Check if block has fallen behind ball relative to current movement direction
-        const pastX = (firstBlock.position.x - ballPosition.x) * this.dirSign < -cleanupThreshold;
-        const pastZ = (firstBlock.position.z - ballPosition.z) * this.dirSign < -cleanupThreshold;
+        const pastX = (firstBlock.position.x - ballPosition.x) * this.xSign < -cleanupThreshold;
+        const pastZ = (firstBlock.position.z - ballPosition.z) * this.zSign < -cleanupThreshold;
 
         if (pastX && pastZ) {
             const removedBlock = this.activeBlocks.shift();
