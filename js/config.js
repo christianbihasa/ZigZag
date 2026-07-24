@@ -2,32 +2,28 @@ export const CONFIG = {
     BLOCK_SIZE: 2,
     
     SPEED_PRESETS: {
-        slow: {
-            label: 'Slow',
-            initial: 0.055,
-            accel: 0.0001
-        },
-        normal: {
-            label: 'Normal',
-            initial: 0.085,
-            accel: 0.0002
-        },
-        fast: {
-            label: 'Fast',
-            initial: 0.12,
-            accel: 0.00035
-        }
+        slow: { label: 'Slow', initial: 0.055, accel: 0.0001 },
+        normal: { label: 'Normal', initial: 0.085, accel: 0.0002 },
+        fast: { label: 'Fast', initial: 0.12, accel: 0.00035 }
     },
     DEFAULT_SPEED_PRESET: 'normal',
 
+    // --- Direction Mode Presets ---
     DIRECTION_MODES: {
         down: {
             label: 'Down (Classic)',
-            sign: 1
+            xSign: 1,
+            zSign: 1
         },
         up: {
             label: 'Up',
-            sign: -1
+            xSign: -1,
+            zSign: -1
+        },
+        right: {
+            label: 'Right',
+            xSign: 1,
+            zSign: -1
         }
     },
     DEFAULT_DIRECTION_MODE: 'down',
