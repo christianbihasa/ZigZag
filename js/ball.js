@@ -11,9 +11,12 @@ export class Ball {
         this.scene.add(this.mesh);
 
         const defaultPreset = CONFIG.SPEED_PRESETS[CONFIG.DEFAULT_SPEED_PRESET];
+        const defaultDir = CONFIG.DIRECTION_MODES[CONFIG.DEFAULT_DIRECTION_MODE];
+        
         this.baseSpeed = defaultPreset.initial;
         this.acceleration = defaultPreset.accel;
-        this.dirSign = CONFIG.DIRECTION_MODES[CONFIG.DEFAULT_DIRECTION_MODE].sign;
+        this.xSign = defaultDir.xSign;
+        this.zSign = defaultDir.zSign;
         
         this.direction = 'z';
         this.speed = this.baseSpeed;
@@ -27,8 +30,9 @@ export class Ball {
         this.speed = this.baseSpeed;
     }
 
-    setDirectionSign(sign) {
-        this.dirSign = sign;
+    setDirectionVector(xSign, zSign) {
+        this.xSign = xSign;
+        this.zSign = zSign;
     }
 
     toggleDirection() {
@@ -38,9 +42,9 @@ export class Ball {
 
     updatePosition() {
         if (this.direction === 'x') {
-            this.mesh.position.x += this.speed * this.dirSign;
+            this.mesh.position.x += this.speed * this.xSign;
         } else {
-            this.mesh.position.z += this.speed * this.dirSign;
+            this.mesh.position.z += this.speed * this.zSign;
         }
     }
 
