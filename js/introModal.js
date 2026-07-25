@@ -4,36 +4,48 @@ export class IntroModal {
         this.modalElement = document.getElementById('intro-modal');
         this.closeButton = document.getElementById('start-game-btn');
         
+        // Save bound event handler reference so removeEventListener works properly
+        this.boundKeyDown = this.handleKeyDown.bind(this);
+
         this.initEvents();
     }
 
     initEvents() {
         // Handle explicit button confirmation
-        this.closeButton.addEventListener('click', (event) => {
-            event.stopPropagation(); // Prevent the click from instantly triggering a game turn
-            this.dismiss();
-        });
+        if (this.closeButton) {
+            this.closeButton.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevent click from triggering a game action
+                this.dismiss();
+            });
+        }
 
-        // Allow pressing Enter or Spacebar to dismiss the modal gracefully
-        window.addEventListener('keydown', this.handleKeyDown.bind(this));
+        // Allow pressing Enter or Spacebar to dismiss the modal
+        window.addEventListener('keydown', this.boundKeyDown);
     }
 
     handleKeyDown(event) {
-        if (this.modalElement.style.display !== 'none') {
+        if (this.modalElement && this.modalElement.style.display !== 'none') {
             if (event.code === 'Enter' || event.code === 'Space') {
                 event.preventDefault();
+                event.stopPropagation(); // Stop Spacebar from triggering InputManager in the same frame
                 this.dismiss();
             }
         }
     }
 
     dismiss() {
-        this.modalElement.style.display = 'none';
-        window.removeEventListener('keydown', this.handleKeyDown.bind(this));
+        if (this.modalElement) {
+            this.modalElement.style.display = 'none';
+        }
+
+        // Unbind key listener cleanly
+        window.removeEventListener('keydown', this.boundKeyDown);
         
-        // Notify the main engine that the game is ready for interaction
+        // Notify the main engine on the next frame so the dismiss keypress isn't read as a game move
         if (this.onDismiss) {
-            this.onDismiss();
+            setTimeout(() => {
+                this.onDismiss();
+            }, 0);
         }
     }
 }
