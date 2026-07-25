@@ -24,6 +24,11 @@ export const CONFIG = {
             label: 'Right',
             xSign: 1,
             zSign: -1
+        },
+        left: {
+            label: 'Left',
+            xSign: -1,
+            zSign: 1
         }
     },
     DEFAULT_DIRECTION_MODE: 'down',
