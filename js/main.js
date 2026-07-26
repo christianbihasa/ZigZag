@@ -63,13 +63,15 @@ class Game {
             this.isModalActive = false;
         });
 
-        // Settings callback applies speed and direction mode updates
+        // Settings callback applies speed, direction, and ball color updates
         this.settingsModal = new SettingsModal((settings) => {
             this.ball.setSpeedConfig(settings.speedPreset.initial, settings.speedPreset.accel);
             
             this.ball.setDirectionVector(settings.directionMode.xSign, settings.directionMode.zSign);
             this.pathManager.setDirectionVector(settings.directionMode.xSign, settings.directionMode.zSign);
             
+            this.ball.setColor(settings.ballColor);
+
             this.restart();
         });
     }
