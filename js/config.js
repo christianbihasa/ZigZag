@@ -22,7 +22,12 @@ export const CONFIG = {
         { id: 'gold', hex: 0xffd700, css: '#ffd700', label: 'Gold' },
         { id: 'crimson', hex: 0xff1744, css: '#ff1744', label: 'Crimson' },
         { id: 'cyan', hex: 0x00e5ff, css: '#00e5ff', label: 'Cyan' },
-        { id: 'lime', hex: 0x76ff03, css: '#76ff03', label: 'Neon Lime' }
+        { id: 'lime', hex: 0x76ff03, css: '#76ff03', label: 'Neon Lime' },
+        { id: 'purple', hex: 0xaa00ff, css: '#aa00ff', label: 'Electric Purple' },
+        { id: 'orange', hex: 0xff6d00, css: '#ff6d00', label: 'Neon Orange' },
+        { id: 'pink', hex: 0xff007f, css: '#ff007f', label: 'Hot Pink' },
+        { id: 'white', hex: 0xffffff, css: '#ffffff', label: 'Snow White' },
+        { id: 'emerald', hex: 0x00b894, css: '#00b894', label: 'Emerald' }
     ],
     DEFAULT_BALL_COLOR: '0x212121',
 
