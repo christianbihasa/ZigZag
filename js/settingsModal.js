@@ -9,9 +9,11 @@ export class SettingsModal {
         
         this.speedButtons = document.querySelectorAll('.speed-option');
         this.directionButtons = document.querySelectorAll('.direction-option');
+        this.colorButtons = document.querySelectorAll('.ball-color-option');
 
         this.currentSpeedPreset = localStorage.getItem('zigzag_speed_preset') || CONFIG.DEFAULT_SPEED_PRESET;
         this.currentDirectionMode = localStorage.getItem('zigzag_direction_mode') || CONFIG.DEFAULT_DIRECTION_MODE;
+        this.currentBallColor = localStorage.getItem('zigzag_ball_color') || CONFIG.DEFAULT_BALL_COLOR;
 
         this.initEvents();
         this.updateActiveUI();
@@ -42,6 +44,13 @@ export class SettingsModal {
                 this.setDirectionMode(btn.dataset.direction);
             });
         });
+
+        this.colorButtons.forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.setBallColor(btn.dataset.color);
+            });
+        });
     }
 
     setSpeedPreset(presetKey) {
@@ -60,6 +69,13 @@ export class SettingsModal {
         this.applySettings();
     }
 
+    setBallColor(hexColor) {
+        this.currentBallColor = hexColor;
+        localStorage.setItem('zigzag_ball_color', hexColor);
+        this.updateActiveUI();
+        this.applySettings();
+    }
+
     updateActiveUI() {
         this.speedButtons.forEach((btn) => {
             btn.classList.toggle('active', btn.dataset.speed === this.currentSpeedPreset);
@@ -67,6 +83,10 @@ export class SettingsModal {
 
         this.directionButtons.forEach((btn) => {
             btn.classList.toggle('active', btn.dataset.direction === this.currentDirectionMode);
+        });
+
+        this.colorButtons.forEach((btn) => {
+            btn.classList.toggle('active', btn.dataset.color === this.currentBallColor);
         });
     }
 
@@ -77,7 +97,8 @@ export class SettingsModal {
         if (this.onSettingsChange && speedPreset && dirMode) {
             this.onSettingsChange({
                 speedPreset,
-                directionMode: dirMode
+                directionMode: dirMode,
+                ballColor: this.currentBallColor
             });
         }
     }
