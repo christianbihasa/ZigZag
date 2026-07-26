@@ -8,30 +8,23 @@ export const CONFIG = {
     },
     DEFAULT_SPEED_PRESET: 'normal',
 
-    // --- Direction Mode Presets ---
     DIRECTION_MODES: {
-        down: {
-            label: 'Down (Classic)',
-            xSign: 1,
-            zSign: 1
-        },
-        up: {
-            label: 'Up',
-            xSign: -1,
-            zSign: -1
-        },
-        right: {
-            label: 'Right',
-            xSign: 1,
-            zSign: -1
-        },
-        left: {
-            label: 'Left',
-            xSign: -1,
-            zSign: 1
-        }
+        down: { label: 'Down (Classic)', xSign: 1, zSign: 1 },
+        up: { label: 'Up', xSign: -1, zSign: -1 },
+        right: { label: 'Right', xSign: 1, zSign: -1 },
+        left: { label: 'Left', xSign: -1, zSign: 1 }
     },
     DEFAULT_DIRECTION_MODE: 'down',
+
+    // --- Ball Color Palette Options ---
+    BALL_COLORS: [
+        { id: 'classic', hex: 0x212121, css: '#212121', label: 'Classic Dark' },
+        { id: 'gold', hex: 0xffd700, css: '#ffd700', label: 'Gold' },
+        { id: 'crimson', hex: 0xff1744, css: '#ff1744', label: 'Crimson' },
+        { id: 'cyan', hex: 0x00e5ff, css: '#00e5ff', label: 'Cyan' },
+        { id: 'lime', hex: 0x76ff03, css: '#76ff03', label: 'Neon Lime' }
+    ],
+    DEFAULT_BALL_COLOR: '0x212121',
 
     PALETTE_SHIFT_INTERVAL: 15,
     COLOR_TRANSITION_SPEED: 0.035,
