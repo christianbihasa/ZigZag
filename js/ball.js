@@ -24,6 +24,10 @@ export class Ball {
         this.reset();
     }
 
+    setColor(hexColor) {
+        this.material.color.setHex(parseInt(hexColor, 16));
+    }
+
     setSpeedConfig(initialSpeed, accel) {
         this.baseSpeed = initialSpeed;
         this.acceleration = accel;
