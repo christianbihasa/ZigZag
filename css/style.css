@@ -332,9 +332,12 @@ canvas {
 
 .ball-color-selector {
     display: flex;
+    flex-wrap: wrap;
     gap: 12px;
     justify-content: center;
     align-items: center;
+    max-width: 280px;
+    margin: 0 auto;
 }
 
 .ball-color-option {
@@ -345,6 +348,7 @@ canvas {
     cursor: pointer;
     transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     outline: none;
+    box-sizing: border-box;
 }
 
 .ball-color-option:hover {
