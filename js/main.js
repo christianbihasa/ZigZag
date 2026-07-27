@@ -30,6 +30,7 @@ class Game {
     initDOM() {
         this.scoreElement = document.getElementById('score');
         this.bestScoreElement = document.getElementById('best-score');
+        this.instructionsElement = document.getElementById('instructions'); // Added reference
         this.gameOverBox = document.getElementById('gameover');
         this.finalScoreElement = document.getElementById('final-score');
         this.bestScoreGameOverElement = document.getElementById('best-score-gameover');
@@ -111,8 +112,11 @@ class Game {
     handleAction() {
         if (this.isModalActive || this.settingsModal.isOpen() || this.isGameOver) return;
 
+        // On first action (game start), hide instructions and best score
         if (!this.isGameStarted) {
             this.isGameStarted = true;
+            if (this.instructionsElement) this.instructionsElement.style.display = 'none';
+            if (this.bestScoreElement) this.bestScoreElement.style.display = 'none';
             return;
         }
 
@@ -120,7 +124,6 @@ class Game {
         this.score++;
         this.scoreElement.innerText = this.score;
 
-        // Update high score live if current score exceeds saved best
         if (this.score > this.getHighScore()) {
             this.saveHighScore(this.score);
             this.updateHighScoreDisplay();
@@ -147,6 +150,10 @@ class Game {
         this.isGameOver = false;
         this.scoreElement.innerText = '0';
         this.gameOverBox.style.display = 'none';
+
+        // Show instructions and best score again for the new run
+        if (this.instructionsElement) this.instructionsElement.style.display = 'block';
+        if (this.bestScoreElement) this.bestScoreElement.style.display = 'block';
 
         this.updateHighScoreDisplay();
         this.ball.reset();
