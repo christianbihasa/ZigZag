@@ -102,15 +102,14 @@
 
     <!-- User Interface Overlay -->
     <div id="ui">
-      <button id="settings-btn" aria-label="Settings">⚙️</button>
-      <div id="score">0</div>
-      <div id="instructions">Tap or Press Space to Turn</div>
-    </div>
+        <button id="settings-btn" aria-label="Settings">⚙️</button>
+        
+        <div id="hud">
+            <div id="score">0</div>
+            <div id="best-score">BEST: 0</div>
+        </div>
 
-    <!-- Score HUD -->
-    <div id="hud">
-        <div id="score">0</div>
-        <div id="best-score">BEST: 0</div>
+        <div id="instructions">Tap or Press Space to Turn</div>
     </div>
 
     <!-- Game Over Screen -->
@@ -122,7 +121,7 @@
             <button id="restart-btn">Play Again</button>
         </div>
     </div>
-    
+
     <script type="module" src="js/main.js"></script>
   </body>
 </html>

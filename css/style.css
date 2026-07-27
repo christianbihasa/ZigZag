@@ -1,3 +1,4 @@
+/* --- Reset & Global Setup --- */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -20,29 +21,81 @@ canvas {
     height: 100%;
 }
 
+/* --- Main UI Overlay --- */
 #ui {
     position: absolute;
-    top: 50px;
+    top: 0;
+    left: 0;
     width: 100%;
-    text-align: center;
-    color: #263238;
+    height: 100%;
     pointer-events: none;
     z-index: 10;
 }
 
+/* --- HUD (Score & Best Score) --- */
+#hud {
+    position: absolute;
+    top: 25px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+}
+
 #score {
-    font-size: 4rem;
+    font-size: 3.5rem;
     font-weight: 800;
-    letter-spacing: 2px;
+    color: #212121;
+    line-height: 1;
+    text-shadow: 0 2px 8px rgba(255, 255, 255, 0.6);
+}
+
+#best-score {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #455a64;
+    letter-spacing: 1px;
+    margin-top: 6px;
+    text-shadow: 0 1px 4px rgba(255, 255, 255, 0.6);
 }
 
 #instructions {
-    font-size: 1.2rem;
+    position: absolute;
+    top: 140px;
+    width: 100%;
+    text-align: center;
+    font-size: 1.1rem;
     font-weight: 600;
-    margin-top: 8px;
     color: #37474f;
 }
 
+/* --- Settings Button --- */
+#settings-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    font-size: 1.5rem;
+    padding: 10px 14px;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+#settings-btn:hover {
+    background: #ffffff;
+    transform: rotate(30deg) scale(1.08);
+}
+
+#settings-btn:active {
+    transform: scale(0.95);
+}
+
+/* --- Game Over Overlay --- */
 #gameover {
     display: none;
     position: absolute;
@@ -57,7 +110,7 @@ canvas {
     z-index: 20;
 }
 
-#gameover h1 {
+#gameover h2 {
     font-size: 2.5rem;
     color: #e91e63;
     margin-bottom: 10px;
@@ -66,7 +119,13 @@ canvas {
 #final-score {
     font-size: 1.5rem;
     color: #455a64;
-    margin-bottom: 25px;
+}
+
+#best-score-gameover {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #00bcd4;
+    margin: 6px 0 20px 0;
 }
 
 #restart-btn {
@@ -89,20 +148,25 @@ canvas {
     transform: scale(0.96);
 }
 
-#intro-modal {
+/* --- Generic Modal Overlay & Content --- */
+#intro-modal, #settings-modal {
     position: absolute;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(38, 50, 56, 0.85); /* Dark frosted background overlay */
+    background: rgba(38, 50, 56, 0.85);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 100; /* Stays securely on top of all interactive elements */
+    z-index: 100;
     padding: 20px;
+}
+
+#settings-modal {
+    z-index: 110;
 }
 
 .modal-content {
@@ -134,6 +198,7 @@ canvas {
     font-weight: 800;
 }
 
+/* --- Intro Modal Components --- */
 .credits {
     font-size: 0.95rem;
     color: #546e7a;
@@ -181,7 +246,7 @@ canvas {
     top: 0;
 }
 
-#start-game-btn {
+#start-game-btn, #close-settings-btn {
     background-color: #00bcd4;
     color: #ffffff;
     border: none;
@@ -195,141 +260,56 @@ canvas {
     transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-#start-game-btn:hover {
+#start-game-btn:hover, #close-settings-btn:hover {
     background-color: #0097a7;
 }
 
-#start-game-btn:active {
+#start-game-btn:active, #close-settings-btn:active {
     transform: scale(0.98);
 }
 
-/* --- Settings Button --- */
-#settings-btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    font-size: 1.5rem;
-    padding: 10px 14px;
-    border-radius: 50%;
-    cursor: pointer;
-    pointer-events: auto;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-#settings-btn:hover {
-    background: #ffffff;
-    transform: rotate(30deg) scale(1.08);
-}
-
-#settings-btn:active {
-    transform: scale(0.95);
-}
-
-/* --- Settings Modal Styling --- */
-#settings-modal {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(38, 50, 56, 0.85);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 110;
-    padding: 20px;
-}
-
+/* --- Settings Modal Selectors --- */
 .setting-group {
-    margin: 25px 0;
+    margin: 20px 0;
     text-align: left;
 }
 
 .setting-group h3 {
     font-size: 1rem;
     color: #37474f;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
-.speed-selector {
+.speed-selector, .direction-selector {
     display: flex;
-    gap: 10px;
+    gap: 8px;
 }
 
-.speed-option {
+.speed-option, .direction-option {
     flex: 1;
-    padding: 12px;
+    padding: 10px 6px;
     border: 2px solid #cfd8dc;
     background: #ffffff;
     color: #455a64;
     border-radius: 12px;
     font-weight: bold;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     cursor: pointer;
     transition: all 0.2s ease;
+    text-align: center;
 }
 
-.speed-option:hover {
+.speed-option:hover, .direction-option:hover {
     border-color: #00bcd4;
 }
 
-.speed-option.active {
+.speed-option.active, .direction-option.active {
     border-color: #00bcd4;
     background-color: #e0f7fa;
     color: #00838f;
 }
 
-#close-settings-btn {
-    background-color: #00bcd4;
-    color: #ffffff;
-    border: none;
-    width: 100%;
-    padding: 14px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    border-radius: 12px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.2s ease;
-}
-
-#close-settings-btn:hover {
-    background-color: #0097a7;
-}
-
-.direction-selector {
-    display: flex;
-    gap: 10px;
-}
-
-.direction-option {
-    flex: 1;
-    padding: 12px;
-    border: 2px solid #cfd8dc;
-    background: #ffffff;
-    color: #455a64;
-    border-radius: 12px;
-    font-weight: bold;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.direction-option:hover {
-    border-color: #00bcd4;
-}
-
-.direction-option.active {
-    border-color: #00bcd4;
-    background-color: #e0f7fa;
-    color: #00838f;
-}
-
+/* --- Ball Color Swatches --- */
 .ball-color-selector {
     display: flex;
     flex-wrap: wrap;
@@ -341,8 +321,8 @@ canvas {
 }
 
 .ball-color-option {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     border: 3px solid transparent;
     cursor: pointer;
@@ -359,38 +339,4 @@ canvas {
     border-color: #00bcd4;
     transform: scale(1.15);
     box-shadow: 0 0 10px rgba(0, 188, 212, 0.6);
-}
-
-#hud {
-    position: absolute;
-    top: 20px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    pointer-events: none;
-    z-index: 10;
-}
-
-#score {
-    font-size: 3.5rem;
-    font-weight: 800;
-    color: #212121;
-    text-shadow: 0 2px 8px rgba(255, 255, 255, 0.6);
-}
-
-#best-score {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #455a64;
-    letter-spacing: 1px;
-    margin-top: -5px;
-    text-shadow: 0 1px 4px rgba(255, 255, 255, 0.6);
-}
-
-#best-score-gameover {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #00bcd4;
-    margin: 6px 0 16px 0;
 }
