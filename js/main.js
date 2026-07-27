@@ -15,10 +15,13 @@ class Game {
         this.isGameStarted = false;
         this.isGameOver = false;
 
+        this.currentDirectionKey = localStorage.getItem('zigzag_direction_mode') || CONFIG.DEFAULT_DIRECTION_MODE;
+
         this.initDOM();
         this.initScene();
         this.initEntities();
         this.initEvents();
+        this.updateHighScoreDisplay();
         
         this.animate = this.animate.bind(this);
         requestAnimationFrame(this.animate);
@@ -26,11 +29,31 @@ class Game {
 
     initDOM() {
         this.scoreElement = document.getElementById('score');
+        this.bestScoreElement = document.getElementById('best-score');
         this.gameOverBox = document.getElementById('gameover');
         this.finalScoreElement = document.getElementById('final-score');
+        this.bestScoreGameOverElement = document.getElementById('best-score-gameover');
         this.restartButton = document.getElementById('restart-btn');
 
         this.restartButton.addEventListener('click', () => this.restart());
+    }
+
+    getHighScore(dirKey = this.currentDirectionKey) {
+        return parseInt(localStorage.getItem(`zigzag_highscore_${dirKey}`) || '0', 10);
+    }
+
+    saveHighScore(newScore, dirKey = this.currentDirectionKey) {
+        localStorage.setItem(`zigzag_highscore_${dirKey}`, newScore);
+    }
+
+    updateHighScoreDisplay() {
+        const bestScore = this.getHighScore();
+        if (this.bestScoreElement) {
+            this.bestScoreElement.innerText = `BEST: ${bestScore}`;
+        }
+        if (this.bestScoreGameOverElement) {
+            this.bestScoreGameOverElement.innerText = `Best: ${bestScore}`;
+        }
     }
 
     initScene() {
@@ -63,7 +86,6 @@ class Game {
             this.isModalActive = false;
         });
 
-        // Settings callback applies speed, direction, and ball color updates
         this.settingsModal = new SettingsModal((settings) => {
             this.ball.setSpeedConfig(settings.speedPreset.initial, settings.speedPreset.accel);
             
@@ -71,6 +93,11 @@ class Game {
             this.pathManager.setDirectionVector(settings.directionMode.xSign, settings.directionMode.zSign);
             
             this.ball.setColor(settings.ballColor);
+
+            if (settings.directionKey) {
+                this.currentDirectionKey = settings.directionKey;
+                this.updateHighScoreDisplay();
+            }
 
             this.restart();
         });
@@ -93,13 +120,25 @@ class Game {
         this.score++;
         this.scoreElement.innerText = this.score;
 
+        // Update high score live if current score exceeds saved best
+        if (this.score > this.getHighScore()) {
+            this.saveHighScore(this.score);
+            this.updateHighScoreDisplay();
+        }
+
         this.themeManager.updateScore(this.score);
     }
 
     triggerGameOver() {
         this.isGameOver = true;
+        
+        if (this.score > this.getHighScore()) {
+            this.saveHighScore(this.score);
+        }
+        
+        this.updateHighScoreDisplay();
         this.finalScoreElement.innerText = `Score: ${this.score}`;
-        this.gameOverBox.style.display = 'block';
+        this.gameOverBox.style.display = 'flex';
     }
 
     restart() {
@@ -109,6 +148,7 @@ class Game {
         this.scoreElement.innerText = '0';
         this.gameOverBox.style.display = 'none';
 
+        this.updateHighScoreDisplay();
         this.ball.reset();
         this.cameraManager.reset();
         this.pathManager.reset();
