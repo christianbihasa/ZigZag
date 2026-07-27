@@ -98,6 +98,7 @@ export class SettingsModal {
             this.onSettingsChange({
                 speedPreset,
                 directionMode: dirMode,
+                directionKey: this.currentDirectionMode,
                 ballColor: this.currentBallColor
             });
         }
