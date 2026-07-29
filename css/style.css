@@ -95,21 +95,7 @@ canvas {
     transform: scale(0.95);
 }
 
-/* --- Game Over Overlay --- */
-#gameover {
-    display: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 40px 50px;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    z-index: 20;
-}
-
+/* --- Game Over Overlay & Typography --- */
 #gameover h2 {
     font-size: 2.5rem;
     color: #e91e63;
@@ -148,8 +134,8 @@ canvas {
     transform: scale(0.96);
 }
 
-/* --- Generic Modal Overlay & Content --- */
-#intro-modal, #settings-modal {
+/* --- Generic Modal Overlays & Content --- */
+#intro-modal, #settings-modal, #gameover {
     position: absolute;
     top: 0;
     left: 0;
